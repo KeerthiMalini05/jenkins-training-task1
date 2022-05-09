@@ -13,7 +13,7 @@ pipeline {
      
   stage('Push Image'){
           steps{
-       withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {            
+       withDockerRegistry([ credentialsId: "git", url: "" ]) {            
        sh 'docker push keerthi05/keerthi-sample-nodejs:latest'
        sh 'docker push keerthi05/keerthi-sample-nodejs:$BUILD_NUMBER'   
    }
