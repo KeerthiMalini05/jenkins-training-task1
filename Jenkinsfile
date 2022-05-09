@@ -1,20 +1,23 @@
-node {
-     def app 
-     stage('clone repository') {
-      checkout scm  
-    }
+pipeline {
+     agent any
+     
+     
+  stages{
      stage('Build docker Image'){
-      app = docker.build("keerthi05/keerthi-sample-nodejs")
+          steps{
+               sh ' docker build -t keerthi-sample-nodejs .'
+               sh 'docker tag keerthi-sample-nodejs keerthi05/keerthi-sample-nodejs:latest'
+               sh 'docker tag keerthi-sample-nodejs keerthi05/keerthi-sample-nodejs:$BUILD_NUMBER'
     }
-     stage('Test Image'){
-       app.inside {
-         sh 'echo "TEST PASSED"' 
-      }  
-    }
-     stage('Push Image'){
-       docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {            
-       app.push("${env.BUILD_NUMBER}")            
-       app.push("latest")   
+     }
+     
+  stage('Push Image'){
+          steps{
+       withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {            
+       sh 'docker push keerthi05/keerthi-sample-nodejs:latest'
+       sh 'docker push keerthi05/keerthi-sample-nodejs:$BUILD_NUMBER'   
    }
 }
+}
+     }
 }
