@@ -5,4 +5,4 @@ COPY package.json /app
 RUN npm install         
 COPY . /app     
 CMD node main.js
-EXPOSE 8082
+EXPOSE 3000
